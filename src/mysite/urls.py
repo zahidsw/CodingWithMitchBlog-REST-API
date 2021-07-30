@@ -13,6 +13,10 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+import debug_toolbar
+from django.conf import settings
+from django.urls import include
+
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
@@ -36,14 +40,20 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('account/', account_view, name="account"),
     path('blog/', include('blog.urls', 'blog')),
+    path('recommendation/', include('recommendation.urls', 'recommendation')),
+    path('smartfactory/', include('smartfactory.urls', 'smartfactory')),
     path('login/', login_view, name="login"),
     path('logout/', logout_view, name="logout"),
     path('must_authenticate/', must_authenticate_view, name="must_authenticate"),
     path('register/', registration_view, name="register"),
+    path('__debug__/', include(debug_toolbar.urls)),
+
 	
 	# REST-framework
     path('api/blog/', include('blog.api.urls', 'blog_api')),
     path('api/account/', include('account.api.urls', 'account_api')),
+    path('api/recommendation/', include('recommendation.api.urls', 'recommendation_api')),
+    path('api/smartfactory/', include('smartfactory.api.urls', 'smartfactory_api')),
 
     # Password reset links (ref: https://github.com/django/django/blob/master/django/contrib/auth/views.py)
     path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(template_name='registration/password_change_done.html'), 

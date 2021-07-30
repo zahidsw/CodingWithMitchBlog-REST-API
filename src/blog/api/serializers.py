@@ -34,8 +34,6 @@ class BlogPostSerializer(serializers.ModelSerializer):
 		return new_url
 
 
-
-
 class BlogPostUpdateSerializer(serializers.ModelSerializer):
 
 	class Meta:
