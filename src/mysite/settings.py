@@ -125,13 +125,24 @@ ELASTICSEARCH_DSL={
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'django',
-        'PORT': '8889',
+        'NAME': 'django-app-db',
         'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': '/Applications/MAMP/tmp/mysql/mysql.sock',
+        'PASSWORD': '',
+        'HOST': 'db',
+        'PORT': '3306',
     }
 }
+
+#DATABASES = {
+#    'default': {
+#       'ENGINE': 'django.db.backends.mysql',
+#       'NAME': 'django',
+#       'PORT': '8889',
+#       'USER': 'root',
+#        'PASSWORD': 'root',
+#        'HOST': '/Applications/MAMP/tmp/mysql/mysql.sock',
+#    }
+#}
 
 
 # Password validation
