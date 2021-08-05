@@ -1,28 +1,33 @@
-version: "3.8"
+version: '3.7'
+
 services:
   app:
     build:
       context: .
     volumes:
-      - .:/app
-    ports:
-      - 8000:8000
-    image: app:app
-    container_name: app_container
-    command: python manage.py runserver 0.0.0.0:8000
+      - static_data:/web
     environment:
       - DEBUG=1
-
+      - SECRET_KEY=samplesecret123
+      - ALLOWED_HOSTS=127.0.0.1,localhost
+    networks:
+      - elastic
+  proxy:
+    build:
+      context: ./proxy
+    volumes:
+      - static_data:/static
+    ports:
+      - "8080:8080"
     depends_on:
+      - app
       - db
       - es01
       - es02
       - es03
       - kib01
-
     networks:
       - elastic
-
   db:
     image: mysql:5.7
     environment:
@@ -108,6 +113,9 @@ volumes:
     driver: local
   data03:
     driver: local
+
+  static_data:
+
 
 networks:
   elastic:

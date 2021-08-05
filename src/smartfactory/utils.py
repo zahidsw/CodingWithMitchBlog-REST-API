@@ -7,6 +7,10 @@ from sklearn.preprocessing import LabelEncoder
 from django_pandas.io import read_frame
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.neighbors import NearestNeighbors
+"""
+utils file, contains code which are generic
+"""
+from django.core.management import call_command
 
 def is_image_aspect_ratio_valid(img_url):
     img = cv2.imread(img_url)
@@ -309,4 +313,18 @@ def categories(df):
     return category_list2
 
 
+def is_empty_or_null(value):
+    if (not value) or (value == '') or (value is None) or (value == 'null'):
+        return True
+    return False
+
+
+# run elastic search command to rebuild index
+def rebuild_elasticsearch_index():
+    call_command('search_index', '--rebuild', '-f')
+
+
+# run elastic search command to delete index
+def delete_elasticsearch_index():
+    call_command('search_index', '--delete', '-f')
 

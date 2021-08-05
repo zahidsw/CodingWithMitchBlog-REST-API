@@ -57,7 +57,7 @@ from django_elasticsearch_dsl_drf.filter_backends import (
 	SuggesterFilterBackend,
 	DefaultOrderingFilterBackend
 )
-from smartfactory.utils import encoding_data, categories
+from smartfactory.utils import encoding_data, is_empty_or_null, rebuild_elasticsearch_index, delete_elasticsearch_index
 
 SUCCESS = 'success'
 ERROR = 'error'
@@ -224,12 +224,17 @@ def api_create_smart_searchs_view(request):
 	try:
 		smart_searchs = SmartSearch.objects.all()
 		operation = smart_searchs.delete()
+		# delete elastic search index
+		delete_elasticsearch_index()
 		data = {}
 	except SmartSearch.DoesNotExist:
 		return Response(status=status.HTTP_404_NOT_FOUND)
 	response = requests.get('http://10.0.1.5:49000/api/ErpNop')
-	jsonList = response.json()
-	print(len(jsonList))
+	if response == None or response == '':
+		print('I got a null or empty string value for data in a file')
+	else:
+		jsonList = response.json()
+		print(len(jsonList))
 	serializer = {}
 	if request.method == 'GET':
 		for json in jsonList:
@@ -242,6 +247,7 @@ def api_create_smart_searchs_view(request):
 			else:
 				return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 			if jsonList[-1].get('sku') == json.get('sku'):
+				rebuild_elasticsearch_index()
 				return Response("whole data has been downloaded")
 		return Response("data=data")
 
@@ -402,7 +408,6 @@ def api_filters_value_view(request):
 
 
 class PublisherDocumentView(DocumentViewSet):
-	print(DocumentViewSet)
 	print((django_settings.REST_FRAMEWORK)['PAGE_SIZE'])
 	document = SmartSearchDocument
 	serializer_class = SmartSearchElasicSerializer
