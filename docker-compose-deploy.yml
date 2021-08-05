@@ -9,7 +9,7 @@ services:
     environment:
       - DEBUG=1
       - SECRET_KEY=samplesecret123
-      - ALLOWED_HOSTS=127.0.0.1,0.0.0.0
+      - ALLOWED_HOSTS=127.0.0.1,194.182.169.30
     networks:
       - elastic
   proxy:
